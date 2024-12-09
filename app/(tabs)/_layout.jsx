@@ -296,12 +296,31 @@ const Layout = () => (
         tabBarIcon: ({ color }) => <TabIcon icon={icons.home} color={color} name="Home" />,
       }}
     />
+    
+    
+
+<Tabs.Screen
+      name="Nutrition"
+      options={{
+        headerShown: false,
+        title: 'Nutrition',
+        tabBarIcon: ({ color }) => <TabIcon icon={icons.nutrition} color={color} name="Nutrition" />,
+      }}
+    />
     <Tabs.Screen
       name="connect"
       options={{
         headerShown: false,
         title: 'Connect',
         tabBarIcon: ({ color }) => <TabIcon icon={icons.plus} color={color} name="Connect" />,
+      }}
+    />
+    <Tabs.Screen
+      name="Workout"
+      options={{
+        headerShown: false,
+        title: 'Workout',
+        tabBarIcon: ({ color }) => <TabIcon icon={icons.workout} color={color} name="Workout" />,
       }}
     />
     <Tabs.Screen
@@ -312,6 +331,7 @@ const Layout = () => (
         tabBarIcon: ({ color }) => <TabIcon icon={icons.profile} color={color} name="Profile" />,
       }}
     />
+    
   </Tabs>
 );
 

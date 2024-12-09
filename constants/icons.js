@@ -12,6 +12,8 @@ import eyeHide from "../assets/icons/eye-hide.png";
 import eye from "../assets/icons/eye.png";
 import play from "../assets/icons/play.png";
 import Water from '../assets/water-bottle.png'
+import nutrition from '../assets/icons/nutrition.png'
+import workout from '../assets/icons/gym.png'
 
 
 export default {
@@ -28,5 +30,7 @@ export default {
   logout,
   eyeHide,
   eye,
-  Water
+  Water,
+  nutrition,
+  workout
 };

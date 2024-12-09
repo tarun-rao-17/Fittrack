@@ -212,15 +212,22 @@ const Home = () => {
       route: '/(tabs)/profile' 
     },
     { 
-      title: 'Features', 
-      icon: 'list-outline', 
-      route: '/(Features)/About' 
+      title: 'PoseDetection', 
+      icon: 'walk-outline', 
+      route: '/(Features)/Posedetection' 
     },
-    { 
-      title: 'Sign In/Up', 
-      icon: 'log-in-outline', 
-      route: '/(auth)/signin' 
+    {
+      title:'Yoga',
+      icon:'body-outline',
+      route:'/(Features)/Yoga'
+    },
+    {
+      title:'Meditation',
+      icon:'flower-outline',
+      route:'/(Features)/meditation'
     }
+
+
   ];
 
   const handleMenuItemPress = (route) => {

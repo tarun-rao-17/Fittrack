@@ -62,6 +62,8 @@ const Layout = () => {
            <Stack.Screen name='(auth)' options={{ headerShown: false }} />
            <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
            <Stack.Screen name="(Features)" options={{ headerShown: false }} />
+           <Stack.Screen name="(Workout)" options={{ headerShown: false }} />
+
           
          </Stack>
       

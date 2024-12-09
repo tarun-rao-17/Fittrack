@@ -148,22 +148,11 @@ const PoseDetectionScreen = () => {
                 Upload Video
               </Text>
             </TouchableOpacity>
+            <View>
+              
+            </View>
 
-            <TouchableOpacity
-              style={{
-                backgroundColor: '#34D399',
-                paddingVertical: 15,
-                paddingHorizontal: 20,
-                borderRadius: 10,
-                flexDirection: 'row',
-              }}
-              onPress={handleCameraCapture}
-            >
-              <Icon name="video" color="#FFFFFF" size={24} />
-              <Text style={{ color: '#FFFFFF', fontSize: 16, fontWeight: '600',marginLeft:8 }}>
-                Record Video
-              </Text>
-            </TouchableOpacity>
+
           </View>
 
           {videoUri && (

@@ -8,6 +8,8 @@ const _layout = () => {
         <Stack.Screen name="Todaysactivity" options={{headerShown:false}}  />
         <Stack.Screen name="About" options={{headerShown:false}}  />
         <Stack.Screen name="Posedetection" options={{headerShown:false}}  />
+        <Stack.Screen name='Yoga' options={{headerShown:false}}/>
+        <Stack.Screen name='meditation' options={{headerShown:false}}/>
     </Stack>
   )
 }
