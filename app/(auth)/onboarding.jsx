@@ -19,6 +19,7 @@ import Numofdays from "./Components/Numofdays";
 import Place from "./Components/Place";
 import Preference from "./Components/Preference";
 import Diet from "./Components/Diet";
+import Gender from "./Components/Gender";
 
 const { height } = Dimensions.get("window"); // Get window height for dynamic adjustments
 const ITEM_HEIGHT = 50; // Height of each number item
@@ -135,8 +136,14 @@ const Onboarding = () => {
                   Tell Us About Yourself!
                 </Text>
               </View>
+
+              
               {/* You can place an image here */}
             </View>
+          </View>
+          <View style={{flex:1}}>
+            <Gender/>
+
           </View>
 
           {/* Slide 2 (Age Picker) */}
@@ -332,9 +339,9 @@ const Onboarding = () => {
             <Place />
           </View>
           {/* {slide10} */}
-          <View>
+          {/* <View>
             <Preference />
-          </View>
+          </View> */}
           {/* {slide11} */}
           <View>
             <Diet />
