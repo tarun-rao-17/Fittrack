@@ -1,13 +1,24 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Alert, StyleSheet } from 'react-native';
 import { Camera } from 'lucide-react-native';
 import { Video } from 'expo-av';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 const PoseDetectionScreen = () => {
   const [videoUri, setVideoUri] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [exerciseType, setExerciseType] = useState(null);
+  const [exerciseItems, setExerciseItems] = useState([
+    {label: 'Pushups', value: 'pushups'},
+    {label: 'Squats', value: 'squats'},
+    {label: 'Lunges', value: 'lunges'},
+    {label: 'Planks', value: 'planks'},
+    {label: 'Deadlifts', value: 'deadlifts'},
+    {label: 'Bicep Curls', value: 'bicep_curls'},
+    {label: 'Shoulder Press', value: 'shoulder_press'}
+  ]);
 
   const handleVideoUpload = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -120,76 +131,83 @@ const PoseDetectionScreen = () => {
           ))}
         </View>
 
-        {/* Video Upload Area */}
-        <View style={{ alignItems: 'center', marginBottom: 20 }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginBottom: 20,
-            }}
-          >
-            <TouchableOpacity
+        {/* Video Upload and Exercise Type Area */}
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
+          {/* Exercise Type Dropdown */}
+          <View style={{ flex: 1, marginRight: 10, zIndex: 1000 }}>
+            <DropDownPicker
+              open={open}
+              value={exerciseType}
+              items={exerciseItems}
+              setOpen={setOpen}
+              setValue={setExerciseType}
+              setItems={setExerciseItems}
+              placeholder="Select Exercise Type"
               style={{
-                flexDirection: 'row',
-                backgroundColor: '#4A90E2',
-                paddingVertical: 15,
-                paddingHorizontal: 20,
+                borderColor: '#4A90E2',
+                borderWidth: 1,
                 borderRadius: 10,
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginRight: 10,
               }}
-              onPress={handleVideoUpload}
-            >
-              <Camera color="#FFFFFF" size={24} />
-              <Text style={{ color: '#FFFFFF', fontSize: 16, fontWeight: '600', marginLeft: 8 }}>
-                Upload Video
-              </Text>
-            </TouchableOpacity>
-            <View>
-              
-            </View>
-
-
+              dropDownContainerStyle={{
+                borderColor: '#4A90E2',
+              }}
+            />
           </View>
 
-          {videoUri && (
-            <View
-              style={{
-                width: '100%',
-                height: 250,
-                borderRadius: 15,
-                overflow: 'hidden',
-                marginTop: 20,
-                position: 'relative',
-              }}
-            >
-              <Video
-                source={{ uri: videoUri }}
-                style={{ width: '100%', height: '100%' }}
-                resizeMode="cover"
-                shouldPlay
-                isLooping
-              />
-              <TouchableOpacity
-                style={{
-                  position: 'absolute',
-                  bottom: 10,
-                  right: 10,
-                  backgroundColor: 'rgba(255,0,0,0.7)',
-                  paddingVertical: 10,
-                  paddingHorizontal: 15,
-                  borderRadius: 8,
-                }}
-                onPress={() => setVideoUri(null)}
-              >
-                <Text style={{ color: 'white', fontWeight: '600' }}>Remove Video</Text>
-              </TouchableOpacity>
-            </View>
-          )}
+          {/* Video Upload Button */}
+          <TouchableOpacity
+            style={{
+              flexDirection: 'row',
+              backgroundColor: '#4A90E2',
+              paddingVertical: 12,
+              paddingHorizontal: 15,
+              borderRadius: 10,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            onPress={handleVideoUpload}
+          >
+            <Camera color="#FFFFFF" size={20} />
+            <Text style={{ color: '#FFFFFF', fontSize: 14, fontWeight: '600', marginLeft: 8 }}>
+              Upload
+            </Text>
+          </TouchableOpacity>
         </View>
+              
+        {videoUri && (
+          <View
+            style={{
+              width: '100%',
+              height: 200,
+              borderRadius: 15,
+              overflow: 'hidden',
+              marginTop: 20,
+              position: 'relative',
+            }}
+          >
+            <Video
+              source={{ uri: videoUri }}
+              style={{ width: '100%', height: '100%' }}
+              resizeMode="cover"
+              shouldPlay
+              isLooping
+            />
+            <TouchableOpacity
+              style={{
+                position: 'absolute',
+                bottom: 10,
+                right: 10,
+                backgroundColor: 'rgba(255,0,0,0.7)',
+                paddingVertical: 10,
+                paddingHorizontal: 15,
+                borderRadius: 8,
+              }}
+              onPress={() => setVideoUri(null)}
+            >
+              <Text style={{ color: 'white', fontWeight: '600' }}>Remove Video</Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
         {/* Additional Information */}
         <View
@@ -197,6 +215,7 @@ const PoseDetectionScreen = () => {
             backgroundColor: '#FFFFFF',
             borderRadius: 15,
             padding: 20,
+            marginTop: 20,
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.1,

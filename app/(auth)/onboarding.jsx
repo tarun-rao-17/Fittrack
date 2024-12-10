@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Dimensions,
   StatusBar,
+  TextInput,
 } from "react-native";
 import React, { useState, useRef } from "react";
 import { LinearGradient } from "expo-linear-gradient";
@@ -17,7 +18,6 @@ import Activity from "./Components/Activity";
 import Sleep from "./Components/Sleep";
 import Numofdays from "./Components/Numofdays";
 import Place from "./Components/Place";
-import Preference from "./Components/Preference";
 import Diet from "./Components/Diet";
 import Gender from "./Components/Gender";
 
@@ -27,8 +27,9 @@ const CENTER_POSITION = height / 2; // Middle of the screen
 
 const Onboarding = () => {
   const numscroll = Array.from({ length: 100 }, (_, i) => i + 1);
-  const height = Array.from({ length: 100 }, (_, i) => i + 100);
+  const heightArray = Array.from({ length: 151 }, (_, i) => i + 100);
   const [selectedAge, setSelectedAge] = useState(1); // Default to 1
+  const [selectedHeight, setSelectedHeight] = useState(null);
   const [scrollY, setScrollY] = useState(0); // Track scroll position
   const swiperRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(1);
@@ -36,6 +37,12 @@ const Onboarding = () => {
 
   // Handle next button click
   const handleNext = () => {
+    // Add height validation before moving to next slide
+    if (activeIndex === 2 && (!selectedHeight || selectedHeight < 100 || selectedHeight > 250)) {
+      // Optional: Add error handling or alert
+      return;
+    }
+
     if (activeIndex < 10) {
       swiperRef.current.scrollBy(1);
     } else {
@@ -91,7 +98,7 @@ const Onboarding = () => {
 
     // Set selected age
     setSelectedAge(numscroll[selectedIndex]);
-    setSelectedAge(height[selectedIndex]);
+    setSelectedAge(heightArray[selectedIndex]);
 
     // Scroll to nearest item (if not perfectly aligned)
     flatlistref.current.scrollToIndex({ index: selectedIndex, animated: true });
@@ -113,14 +120,14 @@ const Onboarding = () => {
       <View style={{ height: 5, width: "100%", backgroundColor: "#BADDFF" }} />
 
       {/* Swiper */}
-      <View style={{ flex:1 }}>
+      <View style={{ flex: 1 }}>
         <Swiper
           ref={swiperRef}
           onIndexChanged={(index) => setActiveIndex(index)}
           loop={false}
           autoplay={false}
         >
-          {/* Slide 1 */}
+          {/* Previous slides remain the same */}
           <View
             style={{ alignItems: "center", justifyContent: "center", flex: 1 }}
           >
@@ -136,17 +143,14 @@ const Onboarding = () => {
                   Tell Us About Yourself!
                 </Text>
               </View>
-
-              
-              {/* You can place an image here */}
             </View>
           </View>
-          <View style={{flex:1}}>
-            <Gender/>
 
+          <View style={{ flex: 1 }}>
+            <Gender />
           </View>
 
-          {/* Slide 2 (Age Picker) */}
+          {/* Age Slide - Remains the same */}
           <View
             style={{ alignItems: "center", justifyContent: "center", flex: 1 }}
           >
@@ -169,7 +173,7 @@ const Onboarding = () => {
                 </Text>
               </View>
 
-              {/* Scrollable Age Picker */}
+              {/* Existing Age Picker FlatList */}
               <View
                 style={{
                   height: 200,
@@ -187,127 +191,134 @@ const Onboarding = () => {
                   renderItem={renderItem}
                   showsVerticalScrollIndicator={false}
                   snapToAlignment="center"
-                  snapToInterval={ITEM_HEIGHT} // Height of each item (to align snapping)
+                  snapToInterval={ITEM_HEIGHT}
                   decelerationRate="fast"
                   onScroll={(event) => {
                     const offsetY = event.nativeEvent.contentOffset.y;
-                    setScrollY(offsetY); // Track scroll position
+                    setScrollY(offsetY);
                     const selectedIndex = Math.min(
-                      height.length - 1,
+                      heightArray.length - 1,
                       Math.max(0, Math.floor(offsetY / ITEM_HEIGHT))
                     );
-                    setSelectedAge(numscroll[selectedIndex]); // Set selected age
+                    setSelectedAge(numscroll[selectedIndex]);
                   }}
                   onMomentumScrollEnd={handleScrollEnd}
-                  contentContainerStyle={{ paddingVertical: 100 }} // Padding to center the items
+                  contentContainerStyle={{ paddingVertical: 100 }}
                 />
               </View>
 
-              {/* Highlight line (Top and Bottom) */}
+              {/* Highlight lines */}
               <View
                 style={{
                   position: "absolute",
-                  top: 120, // Adjust the position for your layout
+                  top: 120,
                   left: 0,
                   right: 0,
                   height: 2,
-                  backgroundColor: "#00C6FF", // Color for highlight
+                  backgroundColor: "#00C6FF",
                 }}
               />
               <View
                 style={{
                   position: "absolute",
-                  bottom: 90, // Adjust this position as well to match your layout
+                  bottom: 90,
                   left: 0,
                   right: 0,
                   height: 2,
-                  backgroundColor: "#00C6FF", // Color for highlight
+                  backgroundColor: "#00C6FF",
                 }}
               />
             </View>
           </View>
-          {/* {slide3} */}
-          <View
-            style={{ alignItems: "center", justifyContent: "center", flex: 1 }}
-          >
-            <View
-              style={{
-                justifyContent: "center",
-                alignItems: "center",
-                bottom: 120,
-              }}
-            >
-              <View style={{ bottom: 25 }}>
-                <Text
-                  style={{
-                    fontFamily: "Poppins-Bold",
-                    fontSize: 20,
-                    marginBottom: 30,
-                  }}
-                >
-                  What is Your Height in cm?
-                </Text>
-              </View>
 
-              {/* Scrollable Age Picker */}
-              <View
+          {/* New Height Selection Slide */}
+          <View
+            style={{ 
+              alignItems: "center", 
+              justifyContent: "center", 
+              flex: 1,
+              paddingHorizontal: 20 
+            }}
+          >
+            <View style={{ 
+              justifyContent: "center", 
+              alignItems: "center", 
+              marginBottom: 30 
+            }}>
+              <Text
                 style={{
-                  height: 200,
-                  justifyContent: "center",
-                  top: 0,
-                  bottom: 0,
-                  right: 0,
-                  left: 0,
+                  fontFamily: "Poppins-Bold",
+                  fontSize: 22,
+                  marginBottom: 20,
+                  color: "#333"
                 }}
               >
-                <FlatList
-                  ref={flatlistref}
-                  data={height}
-                  keyExtractor={(item) => item.toString()}
-                  renderItem={renderItem}
-                  showsVerticalScrollIndicator={false}
-                  snapToAlignment="center"
-                  snapToInterval={ITEM_HEIGHT} // Height of each item (to align snapping)
-                  decelerationRate="fast"
-                  onScroll={(event) => {
-                    const offsetY = event.nativeEvent.contentOffset.y;
-                    setScrollY(offsetY); // Track scroll position
-                    const selectedIndex = Math.min(
-                      height.length - 1,
-                      Math.max(0, Math.floor(offsetY / ITEM_HEIGHT))
-                    );
-
-                    setSelectedAge(height[selectedIndex]); // Set selected age
-                  }}
-                  onMomentumScrollEnd={handleScrollEnd}
-                  contentContainerStyle={{ paddingVertical: 100 }} // Padding to center the items
-                />
-              </View>
-
-              {/* Highlight line (Top and Bottom) */}
-              <View
-                style={{
-                  position: "absolute",
-                  top: 100, // Adjust the position for your layout
-                  left: 0,
-                  right: 0,
-                  height: 2,
-                  backgroundColor: "#00C6FF", // Color for highlight
-                }}
-              />
-              <View
-                style={{
-                  position: "absolute",
-                  bottom: 100, // Adjust this position as well to match your layout
-                  left: 0,
-                  right: 0,
-                  height: 2,
-                  backgroundColor: "#00C6FF", // Color for highlight
-                }}
-              />
+                What is Your Height?
+              </Text>
             </View>
+
+            <View 
+              style={{
+                width: '100%',
+                backgroundColor: 'white',
+                borderRadius: 15,
+                shadowColor: "#000",
+                shadowOffset: {
+                  width: 0,
+                  height: 2,
+                },
+                shadowOpacity: 0.23,
+                shadowRadius: 2.62,
+                elevation: 4,
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingHorizontal: 15,
+                paddingVertical: 10
+              }}
+            >
+              <TextInput
+                placeholder="Enter height in cm"
+                keyboardType="numeric"
+                value={selectedHeight ? selectedHeight.toString() : ''}
+                onChangeText={(text) => {
+                  // Validate input to ensure only numbers
+                  const numericText = text.replace(/[^0-9]/g, '');
+                  setSelectedHeight(numericText ? parseInt(numericText) : null);
+                }}
+                style={{
+                  flex: 1,
+                  fontFamily: 'Poppins-Regular',
+                  fontSize: 18,
+                  color: '#333'
+                }}
+              />
+              <Text 
+                style={{
+                  fontFamily: 'Poppins-Regular',
+                  color: '#888',
+                  marginLeft: 10
+                }}
+              >
+                cm
+              </Text>
+            </View>
+
+            {/* Validation message */}
+            {selectedHeight && (selectedHeight < 100 || selectedHeight > 250) && (
+              <Text 
+                style={{
+                  color: 'red',
+                  fontFamily: 'Poppins-Regular',
+                  marginTop: 10,
+                  fontSize: 14
+                }}
+              >
+                Please enter a valid height between 100-250 cm
+              </Text>
+            )}
           </View>
-          {/* {slide4} */}
+
+          {/* Remaining slides */}
           <View
             style={{
               flex: 1,
@@ -318,31 +329,21 @@ const Onboarding = () => {
           >
             <Weight />
           </View>
-          {/* {slide5} */}
           <View>
             <Goal />
           </View>
-          {/* {slide6} */}
           <View>
             <Activity />
           </View>
-          {/* {slide7} */}
           <View>
             <Sleep />
           </View>
-          {/* {slide8} */}
           <View>
             <Numofdays />
           </View>
-          {/* {slide9} */}
           <View>
             <Place />
           </View>
-          {/* {slide10} */}
-          {/* <View>
-            <Preference />
-          </View> */}
-          {/* {slide11} */}
           <View>
             <Diet />
           </View>
@@ -357,7 +358,6 @@ const Onboarding = () => {
           alignItems: "center",
           paddingHorizontal: 20,
           paddingBottom: 70,
-          
         }}
       >
         {activeIndex !== 0 ? (
